@@ -1,0 +1,68 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;  /* tom escuro do container */
+    color: #ecca2f;             /* amarelo principal */
+    margin: 0;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+}
+
+/* Remove o fundo mais claro do container */
+.container {
+    background-color: transparent;
+}
+
+/* Textos padrão */
+h1, label, footer, .alert {
+    color: #ecca2f;
+}
+
+label[for="texto_email"],
+footer {
+    color: #fff !important;
+}
+
+/* Caixa de texto */
+textarea {
+    background-color: #1a1a1a;
+    color: #ecca2f;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #008cff;
+    box-shadow: 0 0 6px #008cff88;
+}
+
+/* Botão azul estiloso */
+.btn-custom {
+    background-color: #008CFF;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 24px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+.btn-custom:hover {
+    background-color: #0daeff;
+    transform: scale(1.05);
+}
+
+/* Estilos dos blocos de categoria e resposta */
+.alert-info, .alert-success {
+    background-color: #1e1e1e;
+    border-left: 5px solid #ecca2f;
+    color: #ecca2f;
+}
+footer {
+    color: #fff !important;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
