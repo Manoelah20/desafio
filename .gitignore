@@ -1,0 +1,23 @@
+# Ambiente Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+.venv/
+
+# Arquivo de variáveis de ambiente
+.env
+
+# Logs
+*.log
+
+# Configs do VS Code
+.vscode/
+
+# Arquivos temporários
+*.swp
+.DS_Store
+Thumbs.db
