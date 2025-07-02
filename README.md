@@ -1,36 +1,46 @@
-# 📬 Classificador de E-mails com Inteligência Artificial
+# 📬 Classificador de Emails com IA — Desafio AutoU
 
-Este projeto é uma aplicação web que **classifica automaticamente e-mails em categorias Produtivo ou Improdutivo** e **gera respostas automáticas** com base no conteúdo recebido. Desenvolvido como parte de um desafio técnico, tem como objetivo **automatizar o processamento de grandes volumes de e-mails** em um ambiente corporativo do setor financeiro.
-
----
-
-## 🧠 Tecnologias Utilizadas
-
-- Python 3
-- Flask
-- HTML/CSS
-- OpenAI GPT-3.5 (via API)
-- python-dotenv
-- NLTK / Scikit-learn (opcional para regras ou pré-processamento)
+Este projeto é uma aplicação web que classifica emails como **Produtivos** ou **Improdutivos** usando técnicas de **Processamento de Linguagem Natural (NLP)** e integrações com **IA generativa** (OpenAI). Após a classificação, o sistema também sugere uma resposta automática adequada.
 
 ---
 
-## 🎯 Funcionalidades
+## 🚀 Funcionalidades
 
-- Upload e leitura de conteúdo de e-mails (via texto manual)
-- Classificação automática:
-  - 🟢 Produtivo
-  - 🔵 Improdutivo
-- Geração automática de resposta com IA (GPT)
-- Interface simples, clara e responsiva
-- Variáveis de ambiente para segurança (uso de `.env`)
+- 📎 Upload de arquivos `.txt` e `.pdf`
+- ✏️ Inserção direta de texto
+- 🧠 Classificação automática como **Produtivo** ou **Improdutivo**
+- 🤖 Geração de resposta automática com base no conteúdo
+- 🌐 Interface web acessível, responsiva e simples de usar
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🛠 Tecnologias Utilizadas
 
-1. **Clone este repositório:**
+- **Frontend:** HTML5, CSS3
+- **Backend:** Python + Flask
+- **NLP:** `nltk`, `scikit-learn`
+- **IA:** API da OpenAI para geração de respostas
+- **Hospedagem:** Render (link funcional abaixo)
+
+---
+
+## 📸 Demonstração
+
+🔗 Acesse a aplicação hospedada:  
+[https://desafioweb-fr28.onrender.com](https://desafioweb-fr28.onrender.com)
+
+🎥 Vídeo de demonstração (YouTube):  
+[link-do-video-aqui]
+
+---
+
+## 💻 Como Rodar Localmente
+
+### 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repo.git
-cd seu-repo
+git clone https://github.com/Manoelah20/desafio.git
+cd desafio
+
+🤝 Autora
+Feito com 💙 por Manoela Harrison  LinkedIn · GitHub
