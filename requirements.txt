@@ -5,4 +5,5 @@ nltk # pré-processamento de linguagem natural
 scikit-learn # Biblioteca para aprendizado de máquina (machine learning)
 PyPDF2 # Biblioteca para manipulação de arquivos PDF e extrair arquivos
 pdfminer.six # leitura PDF
+gunicorn # Servidor WSGI para aplicações Python
 
