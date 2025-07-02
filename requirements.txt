@@ -1,9 +1,8 @@
-flask # Framework web para Python ,# Permite criar aplicações web de forma rápida e fácil, # Possui uma grande comunidade e muitos recursos disponíveis
-openai # Biblioteca para interação com a API da OpenAI
-python-dotenv # Carrega variáveis de ambiente a partir de um arquivo .env
-nltk # pré-processamento de linguagem natural
-scikit-learn # Biblioteca para aprendizado de máquina (machine learning)
-PyPDF2 # Biblioteca para manipulação de arquivos PDF e extrair arquivos
-pdfminer.six # leitura PDF
-gunicorn # Servidor WSGI para aplicações Python
+flask 
+openai 
+python-dotenv 
+nltk 
+scikit-learn 
+PyPDF2 
+gunicorn 
 
