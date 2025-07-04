@@ -1,12 +1,17 @@
-# Lista simples para armazenar histórico (reinicia a cada execução)
-historico = []
-
 import os
 import fitz  # PyMuPDF
 from werkzeug.utils import secure_filename
 from flask import Flask, request, render_template
-from utils.classifier import classificar_email
-from utils.responder import gerar_resposta_com_gpt as gerar_resposta
+app = Flask(
+       __name__,
+       template_folder="frontend/templates",
+       static_folder="frontend/static"
+   )
+from backend.utils.responder_local import gerar_resposta_inteligente as gerar_resposta, resposta_automatica_por_categoria
+from backend.utils.classifier import classificar_email
+
+# Lista simples para armazenar histórico (reinicia a cada execução)
+historico = []
 
 # Extensões de arquivos permitidas
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
@@ -14,13 +19,6 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 # Verifica se a extensão do arquivo é válida
 def arquivo_permitido(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# Configuração da aplicação Flask
-app = Flask(
-    __name__,
-    template_folder="../frontend/templates",
-    static_folder="../frontend/static"
-)
 
 @app.route('/')
 def index():
@@ -54,7 +52,9 @@ def processar():
 
     # Processamento com IA
     categoria = classificar_email(texto)
-    resposta = gerar_resposta(texto)
+    print(f"DEBUG: Categoria detectada: {categoria}")
+    resposta = gerar_resposta(texto, categoria)
+    print(f"DEBUG: Resposta gerada: {resposta}")
 
     # Salva no histórico (em memória)
     historico.append({
@@ -73,5 +73,4 @@ def processar():
     )
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run()

@@ -11,36 +11,99 @@ Este projeto é uma aplicação web que classifica emails como **Produtivos** ou
 - 🧠 Classificação automática como **Produtivo** ou **Improdutivo**
 - 🤖 Geração de resposta automática com base no conteúdo
 - 🌐 Interface web acessível, responsiva e simples de usar
+- 📊 Histórico de classificações recentes
 
 ---
 
 ## 🛠 Tecnologias Utilizadas
 
-- **Frontend:** HTML5, CSS3
+- **Frontend:** HTML5, CSS3, Bootstrap 5
 - **Backend:** Python + Flask
-- **NLP:** `nltk`, `scikit-learn`
-- **IA:** API da OpenAI para geração de respostas
-- **Hospedagem:** Render (link funcional abaixo)
+- **NLP:** spaCy (português), NLTK, scikit-learn
+- **IA:** Sistema de respostas inteligentes locais (sem dependência de APIs externas)
+- **Processamento de PDF:** PyMuPDF
+- **Hospedagem:** Render
 
 ---
 
 ## 📸 Demonstração
 
-🔗 Acesse a aplicação hospedada:  
+🔗 **Acesse a aplicação hospedada:**  
 [https://desafioweb-fr28.onrender.com](https://desafioweb-fr28.onrender.com)
 
-🎥 Vídeo de demonstração (YouTube):  
-[link-do-video-aqui]
+🎥 **Vídeo de demonstração (YouTube):**  
+[Link será adicionado após gravação]
 
 ---
 
 ## 💻 Como Rodar Localmente
 
 ### 1. Clone o repositório:
-
 ```bash
 git clone https://github.com/Manoelah20/desafio.git
 cd desafio
+```
 
-🤝 Autora
-Feito com 💙 por Manoela Harrison  LinkedIn · GitHub
+### 2. Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure as variáveis de ambiente (opcional):
+Crie um arquivo `.env` na raiz do projeto se quiser usar APIs externas:
+```env
+# Opcional - apenas se quiser usar OpenAI ou outras APIs
+OPENAI_API_KEY=sua_chave_api_aqui
+```
+
+### 4. Baixe o modelo spaCy para português:
+```bash
+python -m spacy download pt_core_news_sm
+```
+
+### 5. Execute a aplicação:
+```bash
+python app.py
+```
+
+### 6. Acesse no navegador:
+http://localhost:5000
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+desafio-web/
+├── app.py                 # Aplicação principal Flask
+├── requirements.txt       # Dependências Python
+├── render.yaml           # Configuração para deploy no Render
+├── backend/
+│   ├── utils/
+│   │   ├── classifier.py  # Classificador de emails
+│   │   └── responder.py   # Gerador de respostas com OpenAI
+│   └── arquivos_exemplo/  # Arquivos de teste
+├── frontend/
+│   ├── templates/
+│   │   └── index.html     # Interface principal
+│   └── static/
+│       └── style.css      # Estilos CSS
+└── README.md
+```
+
+---
+
+## 🧠 Como Funciona
+
+1. **Classificação:** O sistema usa spaCy para processar o texto em português e identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.)
+
+2. **Geração de Resposta:** Utiliza a API da OpenAI (GPT-3.5-turbo) para gerar respostas contextualizadas e em português brasileiro
+
+3. **Interface:** Interface web responsiva que permite upload de arquivos ou inserção direta de texto
+
+---
+
+## 🤝 Autora
+
+Feito com 💙 por **Manoela Harrison**  
+📧 LinkedIn · GitHub
