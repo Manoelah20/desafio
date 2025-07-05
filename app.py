@@ -1,5 +1,8 @@
 import os
-import fitz  # PyMuPDF
+try:
+    import fitz  # PyMuPDF
+except ImportError:
+    import PyMuPDF as fitz  # Fallback
 from werkzeug.utils import secure_filename
 from flask import Flask, request, render_template
 app = Flask(
