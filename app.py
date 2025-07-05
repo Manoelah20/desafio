@@ -1,8 +1,4 @@
 import os
-try:
-    import fitz  # PyMuPDF
-except ImportError:
-    import PyMuPDF as fitz  # Fallback
 from werkzeug.utils import secure_filename
 from flask import Flask, request, render_template
 app = Flask(
@@ -42,12 +38,9 @@ def processar():
         if arquivo.filename.endswith('.txt'):
             texto = arquivo.read().decode('utf-8')
 
-        # Se for .pdf
+        # Se for .pdf (temporariamente desabilitado para deploy)
         elif arquivo.filename.endswith('.pdf'):
-            with fitz.open(stream=arquivo.read(), filetype="pdf") as doc:
-                texto = ''
-                for pagina in doc:
-                    texto += pagina.get_text()
+            texto = "⚠️ Suporte a PDF temporariamente desabilitado. Por favor, use arquivos .txt ou cole o texto diretamente."
 
     # Se nenhum conteúdo foi fornecido
     if not texto.strip():
