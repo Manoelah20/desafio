@@ -1,16 +1,19 @@
+import os
+from werkzeug.utils import secure_filename
 from flask import Flask, request, render_template
-
 app = Flask(
-    __name__,
-    template_folder="frontend/templates",
-    static_folder="frontend/static"
-)
+       __name__,
+       template_folder="frontend/templates",
+       static_folder="frontend/static"
+   )
+from backend.utils.responder_local import gerar_resposta_inteligente as gerar_resposta, resposta_automatica_por_categoria
+from backend.utils.classifier import classificar_email
 
 # Lista simples para armazenar histórico (reinicia a cada execução)
 historico = []
 
 # Extensões de arquivos permitidas
-ALLOWED_EXTENSIONS = {'txt'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 
 # Verifica se a extensão do arquivo é válida
 def arquivo_permitido(filename):
@@ -35,13 +38,19 @@ def processar():
         if arquivo.filename.endswith('.txt'):
             texto = arquivo.read().decode('utf-8')
 
+        # Se for .pdf (temporariamente desabilitado para deploy)
+        elif arquivo.filename.endswith('.pdf'):
+            texto = "⚠️ Suporte a PDF temporariamente desabilitado. Por favor, use arquivos .txt ou cole o texto diretamente."
+
     # Se nenhum conteúdo foi fornecido
     if not texto.strip():
         return render_template('index.html', categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto ou envie um arquivo válido.")
 
-    # Classificação simples (sem spaCy)
-    categoria = classificar_email_simples(texto)
-    resposta = gerar_resposta_simples(texto, categoria)
+    # Processamento com IA
+    categoria = classificar_email(texto)
+    print(f"DEBUG: Categoria detectada: {categoria}")
+    resposta = gerar_resposta(texto, categoria)
+    print(f"DEBUG: Resposta gerada: {resposta}")
 
     # Salva no histórico (em memória)
     historico.append({
@@ -59,22 +68,5 @@ def processar():
         historico=historico[::-1]
     )
 
-def classificar_email_simples(texto):
-    """Classificação simples sem spaCy"""
-    texto_lower = texto.lower()
-    palavras_produtivas = ['suporte', 'dúvida', 'pendência', 'status', 'requerimento', 'problema', 'ajuda']
-    
-    for palavra in palavras_produtivas:
-        if palavra in texto_lower:
-            return "Produtivo"
-    return "Improdutivo"
-
-def gerar_resposta_simples(texto, categoria):
-    """Resposta simples sem dependências externas"""
-    if categoria == "Produtivo":
-        return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Obrigado pelo contato."
-    else:
-        return "Agradecemos sua mensagem! Caso precise de algo, estamos à disposição."
-
 if __name__ == "__main__":
-    app.run() 
+    app.run()
