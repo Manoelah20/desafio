@@ -27,13 +27,12 @@ def processar():
 
     # Se arquivo foi enviado e é válido
     if arquivo and arquivo.filename != '' and arquivo_permitido(arquivo.filename):
-        # Verifica se está vazio
-        if arquivo.content_length == 0:
-            return render_template('index.html', categoria="⚠️ Arquivo vazio!", resposta="Por favor, envie um arquivo com conteúdo válido.")
-
         # Se for .txt
-        if arquivo.filename.endswith('.txt'):
+        if arquivo.filename and arquivo.filename.endswith('.txt'):
             texto = arquivo.read().decode('utf-8')
+            # Verifica se está vazio após leitura
+            if not texto.strip():
+                return render_template('index.html', categoria="⚠️ Arquivo vazio!", resposta="Por favor, envie um arquivo com conteúdo válido.")
 
     # Se nenhum conteúdo foi fornecido
     if not texto.strip():
@@ -58,6 +57,7 @@ def processar():
         texto_email=texto,
         historico=historico[::-1]
     )
+
 
 def classificar_email_simples(texto):
     """Classificação simples sem spaCy"""

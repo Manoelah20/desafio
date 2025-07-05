@@ -19,8 +19,7 @@ Este projeto é uma aplicação web que classifica emails como **Produtivos** ou
 
 - **Frontend:** HTML5, CSS3, Bootstrap 5
 - **Backend:** Python + Flask
-- **NLP:** spaCy (português), NLTK, scikit-learn
-- **IA:** Sistema de respostas inteligentes locais (sem dependência de APIs externas)
+- **IA:** Sistema de classificação simples baseado em palavras-chave
 - **Processamento de arquivos:** Suporte a arquivos .txt
 - **Hospedagem:** Render
 
@@ -56,17 +55,12 @@ Crie um arquivo `.env` na raiz do projeto se quiser usar APIs externas:
 OPENAI_API_KEY=sua_chave_api_aqui
 ```
 
-### 4. Baixe o modelo spaCy para português:
-```bash
-python -m spacy download pt_core_news_sm
-```
-
-### 5. Execute a aplicação:
+### 4. Execute a aplicação:
 ```bash
 python app.py
 ```
 
-### 6. Acesse no navegador:
+### 5. Acesse no navegador:
 http://localhost:5000
 
 ---
@@ -95,9 +89,9 @@ desafio-web/
 
 ## 🧠 Como Funciona
 
-1. **Classificação:** O sistema usa spaCy para processar o texto em português e identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.)
+1. **Classificação:** O sistema identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.) usando análise simples de texto
 
-2. **Geração de Resposta:** Utiliza a API da OpenAI (GPT-3.5-turbo) para gerar respostas contextualizadas e em português brasileiro
+2. **Geração de Resposta:** Gera respostas automáticas baseadas na categoria detectada
 
 3. **Interface:** Interface web responsiva que permite upload de arquivos ou inserção direta de texto
 
