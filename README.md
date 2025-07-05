@@ -21,7 +21,7 @@ Este projeto é uma aplicação web que classifica emails como **Produtivos** ou
 - **Backend:** Python + Flask
 - **NLP:** spaCy (português), NLTK, scikit-learn
 - **IA:** Sistema de respostas inteligentes locais (sem dependência de APIs externas)
-- **Processamento de PDF:** PyMuPDF
+- **Processamento de arquivos:** Suporte a arquivos .txt
 - **Hospedagem:** Render
 
 ---
