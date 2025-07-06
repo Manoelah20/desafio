@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from backend.utils.responder_local import gerar_resposta_inteligente as gerar_resposta
 
 app = Flask(
     __name__,
@@ -40,7 +41,7 @@ def processar():
 
     # Classificação simples (sem spaCy)
     categoria = classificar_email_simples(texto)
-    resposta = gerar_resposta_simples(texto, categoria)
+    resposta = gerar_resposta(texto, categoria)
 
     # Salva no histórico (em memória)
     historico.append({
@@ -69,12 +70,7 @@ def classificar_email_simples(texto):
             return "Produtivo"
     return "Improdutivo"
 
-def gerar_resposta_simples(texto, categoria):
-    """Resposta simples sem dependências externas"""
-    if categoria == "Produtivo":
-        return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Obrigado pelo contato."
-    else:
-        return "Agradecemos sua mensagem! Caso precise de algo, estamos à disposição."
+
 
 if __name__ == "__main__":
     app.run() 

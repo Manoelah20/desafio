@@ -19,7 +19,7 @@ Este projeto é uma aplicação web que classifica emails como **Produtivos** ou
 
 - **Frontend:** HTML5, CSS3, Bootstrap 5
 - **Backend:** Python + Flask
-- **IA:** Sistema de classificação simples baseado em palavras-chave
+- **IA:** Sistema de classificação inteligente com respostas contextuais
 - **Processamento de arquivos:** Suporte a arquivos .txt
 - **Hospedagem:** Render
 
@@ -89,9 +89,9 @@ desafio-web/
 
 ## 🧠 Como Funciona
 
-1. **Classificação:** O sistema identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.) usando análise simples de texto
+1. **Classificação:** O sistema identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.) usando análise inteligente de texto
 
-2. **Geração de Resposta:** Gera respostas automáticas baseadas na categoria detectada
+2. **Geração de Resposta:** Utiliza um sistema de templates inteligentes que gera respostas contextuais baseadas no tipo específico de email (suporte, dúvida, pendência, status, etc.)
 
 3. **Interface:** Interface web responsiva que permite upload de arquivos ou inserção direta de texto
 
