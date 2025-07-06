@@ -28,7 +28,7 @@ Este projeto é uma aplicação web que classifica emails como **Produtivos** ou
 ## 📸 Demonstração
 
 🔗 **Acesse a aplicação hospedada:**  
-[https://desafioweb-fr28.onrender.com](https://desafioweb-fr28.onrender.com)
+[https://desafioweb-fr28.onrender.com](https://desafioweb-fr28.onrender.com) *(pode demorar 30-50s na primeira requisição)*
 
 🎥 **Vídeo de demonstração (YouTube):**  
 [Link será adicionado após gravação]
