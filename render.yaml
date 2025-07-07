@@ -8,8 +8,8 @@ services:
       echo "Build completed successfully"
     startCommand: |
       echo "Starting Flask app..."
-      python -c "import flask; print('Flask version:', flask.__version__)"
-      python app_final.py
+      python3 -c "import flask; print('Flask version:', flask.__version__)"
+      python3 app_final.py
     envVars:
       - key: PORT
         value: 10000
