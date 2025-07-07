@@ -2,8 +2,12 @@ services:
   - type: web
     name: desafioweb
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    buildCommand: |
+      pip install flask==2.3.3
+      echo "Build completed successfully"
+    startCommand: |
+      echo "Starting Flask app..."
+      python app.py
     envVars:
       - key: PORT
         value: 10000
