@@ -3,12 +3,16 @@ services:
     name: desafioweb
     env: python
     buildCommand: |
-      pip install flask==2.3.3
+      echo "Installing dependencies..."
+      pip install -r requirements.txt
       echo "Build completed successfully"
     startCommand: |
       echo "Starting Flask app..."
+      python -c "import flask; print('Flask version:', flask.__version__)"
       python app.py
     envVars:
       - key: PORT
         value: 10000
+      - key: PYTHONUNBUFFERED
+        value: 1
 

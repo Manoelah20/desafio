@@ -2,16 +2,6 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# Carrega modelo spaCy para português (opcional)
-nlp = None
-try:
-    import spacy
-    nlp = spacy.load("pt_core_news_sm")
-    print("✅ Modelo spaCy carregado com sucesso!")
-except:
-    print("⚠️ spaCy não disponível. Usando classificação simples.")
-    nlp = None
-
 # Template HTML inline
 HTML_TEMPLATE = '''
 <!DOCTYPE html>
@@ -118,9 +108,8 @@ def processar():
     if not texto.strip():
         return render_template_string(HTML_TEMPLATE, categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto ou envie um arquivo.")
 
-    # Classificação avançada com NLP
-    categoria = classificar_email_avancado(texto)
-    # Usa resposta automática melhorada (mais confiável)
+    # Classificação simples e confiável
+    categoria = classificar_email_simples(texto)
     resposta = gerar_resposta_automatica(categoria)
 
     # Salva no histórico (em memória)
@@ -138,46 +127,40 @@ def processar():
         texto_email=texto
     )
 
-def classificar_email_avancado(texto):
-    """Classificação avançada com spaCy"""
-    if nlp is None:
-        # Fallback para classificação simples
-        return classificar_email_simples(texto)
-    
-    # Processamento com spaCy
-    doc = nlp(texto.lower())
-    
-    # Palavras-chave produtivas com lematização
-    palavras_produtivas = ['suporte', 'dúvida', 'pendência', 'status', 'requerimento', 'problema', 'ajuda', 'solicitação', 'assistência']
-    
-    # Extrai lemas (formas base das palavras)
-    lemas = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
-    
-    # Verifica palavras-chave nos lemas
-    for palavra in palavras_produtivas:
-        if palavra in lemas:
-            return "Produtivo"
-    
-    # Análise adicional: verifica entidades nomeadas
-    for ent in doc.ents:
-        if ent.label_ in ['ORG', 'PERSON', 'MONEY', 'DATE']:
-            # Se tem entidades importantes, pode ser produtivo
-            if any(palavra in texto.lower() for palavra in ['preciso', 'necessito', 'urgente']):
-                return "Produtivo"
-    
-    return "Improdutivo"
-
 def classificar_email_simples(texto):
-    """Classificação simples (fallback)"""
+    """Classificação simples e confiável"""
     texto_lower = texto.lower()
-    palavras_produtivas = ['suporte', 'dúvida', 'pendência', 'status', 'requerimento', 'problema', 'ajuda']
     
-    for palavra in palavras_produtivas:
-        if palavra in texto_lower:
+    # Palavras-chave produtivas
+    palavras_produtivas = [
+        'suporte', 'dúvida', 'pendência', 'status', 'requerimento', 
+        'problema', 'ajuda', 'solicitação', 'assistência', 'urgente',
+        'preciso', 'necessito', 'falha', 'erro', 'bug', 'defeito',
+        'reclamação', 'reembolso', 'cancelamento', 'troca'
+    ]
+    
+    # Palavras-chave improdutivas
+    palavras_improdutivas = [
+        'spam', 'promoção', 'oferta', 'desconto', 'marketing',
+        'newsletter', 'publicidade', 'propaganda', 'venda'
+    ]
+    
+    # Conta palavras produtivas
+    count_produtivo = sum(1 for palavra in palavras_produtivas if palavra in texto_lower)
+    
+    # Conta palavras improdutivas
+    count_improdutivo = sum(1 for palavra in palavras_improdutivas if palavra in texto_lower)
+    
+    # Se tem mais palavras produtivas, é produtivo
+    if count_produtivo > count_improdutivo:
+        return "Produtivo"
+    elif count_improdutivo > count_produtivo:
+        return "Improdutivo"
+    else:
+        # Se empate, verifica se tem palavras-chave fortes
+        if any(palavra in texto_lower for palavra in ['urgente', 'problema', 'erro', 'falha']):
             return "Produtivo"
-    return "Improdutivo"
-
-
+        return "Improdutivo"
 
 def gerar_resposta_automatica(categoria):
     """Resposta automática baseada na categoria"""
@@ -186,14 +169,8 @@ def gerar_resposta_automatica(categoria):
     else:
         return "Agradecemos sua mensagem! Caso precise de alguma informação ou suporte, estamos sempre disponíveis para ajudar."
 
-def gerar_resposta_simples(texto, categoria):
-    """Resposta simples (fallback)"""
-    if categoria == "Produtivo":
-        return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Obrigado pelo contato."
-    else:
-        return "Agradecemos sua mensagem! Caso precise de algo, estamos à disposição."
-
 if __name__ == "__main__":
     import os
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port) 
+    print(f"🚀 Iniciando aplicação na porta {port}")
+    app.run(host='0.0.0.0', port=port, debug=False) 
