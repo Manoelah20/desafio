@@ -4,9 +4,6 @@ services:
     env: python
     buildCommand: |
       pip install flask==2.3.3
-      pip install spacy==3.7.2
-      pip install requests==2.31.0
-      python -m spacy download pt_core_news_sm
       echo "Build completed successfully"
     startCommand: |
       echo "Starting Flask app..."

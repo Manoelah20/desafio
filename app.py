@@ -1,16 +1,15 @@
 from flask import Flask, request, render_template_string
-import spacy
-import requests
-import json
 
 app = Flask(__name__)
 
-# Carrega modelo spaCy para português
+# Carrega modelo spaCy para português (opcional)
+nlp = None
 try:
+    import spacy
     nlp = spacy.load("pt_core_news_sm")
     print("✅ Modelo spaCy carregado com sucesso!")
-except OSError:
-    print("⚠️ Modelo spaCy não encontrado. Usando classificação simples.")
+except:
+    print("⚠️ spaCy não disponível. Usando classificação simples.")
     nlp = None
 
 # Template HTML inline
@@ -79,7 +78,7 @@ HTML_TEMPLATE = '''
         </div>
 
         <footer class="text-center mt-5 text-white small">
-            Desenvolvido por Manoela | IA + Flask 🤖💌
+            Desenvolvido por Manoela Harrison | IA + Flask 🤖💌
         </footer>
     </div>
 
@@ -162,39 +161,7 @@ def classificar_email_simples(texto):
             return "Produtivo"
     return "Improdutivo"
 
-def gerar_resposta_com_ia(texto, categoria):
-    """Gera resposta usando API de IA (Hugging Face)"""
-    try:
-        # API Hugging Face para geração de texto
-        API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
-        
-        # Prompt em português
-        prompt = f"""
-        Você é um assistente profissional respondendo a um email.
-        Email recebido: {texto}
-        Categoria: {categoria}
-        
-        Responda de forma educada e profissional em português brasileiro.
-        Seja conciso e direto ao ponto.
-        """
-        
-        headers = {"Content-Type": "application/json"}
-        payload = {"inputs": prompt}
-        
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=10)
-        
-        if response.status_code == 200:
-            result = response.json()
-            if isinstance(result, list) and len(result) > 0:
-                return result[0].get('generated_text', 'Resposta gerada com sucesso.')
-            return "Resposta gerada com sucesso."
-        else:
-            # Fallback para resposta automática
-            return gerar_resposta_automatica(categoria)
-            
-    except Exception as e:
-        # Fallback para resposta automática
-        return gerar_resposta_automatica(categoria)
+
 
 def gerar_resposta_automatica(categoria):
     """Resposta automática baseada na categoria"""
