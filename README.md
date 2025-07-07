@@ -1,25 +1,25 @@
-# 📬 Classificador de Emails com IA — Desafio AutoU
+# 📬 Classificador de E-mails com IA — Desafio AutoU
 
-Este projeto é uma aplicação web que classifica emails como **Produtivos** ou **Improdutivos** usando técnicas de **Processamento de Linguagem Natural (NLP)** e integrações com **IA generativa** (OpenAI). Após a classificação, o sistema também sugere uma resposta automática adequada.
+Este projeto é uma aplicação web que classifica emails como **Produtivos** ou **Improdutivos** usando técnicas de **Processamento de Linguagem Natural (NLP)**. Após a classificação, o sistema também sugere uma resposta automática adequada.
 
 ---
 
 ## 🚀 Funcionalidades
 
-- 📎 Upload de arquivos `.txt` e `.pdf`
+- 📎 Upload de arquivos `.txt`
 - ✏️ Inserção direta de texto
 - 🧠 Classificação automática como **Produtivo** ou **Improdutivo**
-- 🤖 Geração de resposta automática com base no conteúdo
-- 🌐 Interface web acessível, responsiva e simples de usar
-- 📊 Histórico de classificações recentes
+- 🤖 Geração de resposta automática com base na categoria
+- 🌐 Interface web responsiva com design moderno (preto e amarelo)
+- 📊 Sistema de pontuação inteligente para classificação
 
 ---
 
 ## 🛠 Tecnologias Utilizadas
 
-- **Frontend:** HTML5, CSS3, Bootstrap 5
+- **Frontend:** HTML5, CSS3, Bootstrap 5, Font Awesome
 - **Backend:** Python + Flask
-- **IA:** Sistema de classificação inteligente com respostas contextuais
+- **IA:** Sistema de classificação baseado em palavras-chave
 - **Processamento de arquivos:** Suporte a arquivos .txt
 - **Hospedagem:** Render
 
@@ -48,19 +48,12 @@ cd desafio
 pip install -r requirements.txt
 ```
 
-### 3. Configure as variáveis de ambiente (opcional):
-Crie um arquivo `.env` na raiz do projeto se quiser usar APIs externas:
-```env
-# Opcional - apenas se quiser usar OpenAI ou outras APIs
-OPENAI_API_KEY=sua_chave_api_aqui
-```
-
-### 4. Execute a aplicação:
+### 3. Execute a aplicação:
 ```bash
-python app.py
+python app_final.py
 ```
 
-### 5. Acesse no navegador:
+### 4. Acesse no navegador:
 http://localhost:5000
 
 ---
@@ -69,19 +62,11 @@ http://localhost:5000
 
 ```
 desafio-web/
-├── app.py                 # Aplicação principal Flask
-├── requirements.txt       # Dependências Python
+├── app_final.py           # Aplicação principal Flask (versão otimizada)
+├── requirements.txt       # Dependências Python (apenas Flask)
 ├── render.yaml           # Configuração para deploy no Render
-├── backend/
-│   ├── utils/
-│   │   ├── classifier.py  # Classificador de emails
-│   │   └── responder.py   # Gerador de respostas com OpenAI
-│   └── arquivos_exemplo/  # Arquivos de teste
-├── frontend/
-│   ├── templates/
-│   │   └── index.html     # Interface principal
-│   └── static/
-│       └── style.css      # Estilos CSS
+├── Procfile              # Configuração alternativa para deploy
+├── start.sh              # Script de inicialização (backup)
 └── README.md
 ```
 
@@ -89,11 +74,49 @@ desafio-web/
 
 ## 🧠 Como Funciona
 
-1. **Classificação:** O sistema identifica palavras-chave relacionadas a atividades produtivas (suporte, dúvida, pendência, etc.) usando análise inteligente de texto
+### 1. **Classificação Inteligente:**
+O sistema analisa o texto procurando por palavras-chave específicas:
 
-2. **Geração de Resposta:** Utiliza um sistema de templates inteligentes que gera respostas contextuais baseadas no tipo específico de email (suporte, dúvida, pendência, status, etc.)
+**Palavras Produtivas:**
+- suporte, dúvida, pendência, status, requerimento
+- problema, ajuda, solicitação, assistência, urgente
+- preciso, necessito, falha, erro, bug, defeito
+- reclamação, reembolso, cancelamento, troca
 
-3. **Interface:** Interface web responsiva que permite upload de arquivos ou inserção direta de texto
+**Palavras Improdutivas:**
+- spam, promoção, oferta, desconto, marketing
+- newsletter, publicidade, propaganda, venda
+
+### 2. **Sistema de Pontuação:**
+- Conta as ocorrências de palavras produtivas vs improdutivas
+- Em caso de empate, verifica palavras-chave fortes (urgente, problema, erro, falha)
+- Toma decisão baseada na predominância
+
+### 3. **Geração de Resposta:**
+- **Produtivo:** Resposta profissional com compromisso de retorno
+- **Improdutivo:** Resposta educada e disponibilidade para suporte
+
+---
+
+## 🚀 Deploy
+
+O projeto está configurado para deploy automático no Render:
+
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `python app_final.py`
+- **Environment:** Python
+- **Port:** 10000
+
+---
+
+## 🎯 Características Técnicas
+
+- ✅ **Código limpo e otimizado** - Sem dependências desnecessárias
+- ✅ **Deploy confiável** - Configuração simplificada para Render
+- ✅ **Interface responsiva** - Design moderno com Bootstrap 5
+- ✅ **Classificação precisa** - Algoritmo baseado em palavras-chave
+- ✅ **Upload de arquivos** - Suporte completo a arquivos .txt
+- ✅ **Respostas automáticas** - Sistema inteligente de geração
 
 ---
 
@@ -101,3 +124,13 @@ desafio-web/
 
 Feito com 💙 por **Manoela Harrison**  
 📧 LinkedIn · GitHub
+
+---
+
+## 📝 Notas de Desenvolvimento
+
+Este projeto foi desenvolvido com foco em:
+- **Simplicidade:** Código limpo e fácil de manter
+- **Confiabilidade:** Funcionamento estável em produção
+- **Usabilidade:** Interface intuitiva e responsiva
+- **Escalabilidade:** Arquitetura preparada para expansões futuras
