@@ -1,6 +1,17 @@
 from flask import Flask, request, render_template_string
+import spacy
+import requests
+import json
 
 app = Flask(__name__)
+
+# Carrega modelo spaCy para português
+try:
+    nlp = spacy.load("pt_core_news_sm")
+    print("✅ Modelo spaCy carregado com sucesso!")
+except OSError:
+    print("⚠️ Modelo spaCy não encontrado. Usando classificação simples.")
+    nlp = None
 
 # Template HTML inline
 HTML_TEMPLATE = '''
@@ -92,9 +103,9 @@ def processar():
     if not texto.strip():
         return render_template_string(HTML_TEMPLATE, categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto.")
 
-    # Classificação simples
-    categoria = classificar_email_simples(texto)
-    resposta = gerar_resposta_simples(texto, categoria)
+    # Classificação avançada com NLP
+    categoria = classificar_email_avancado(texto)
+    resposta = gerar_resposta_com_ia(texto, categoria)
 
     # Salva no histórico (em memória)
     historico.append({
@@ -111,8 +122,37 @@ def processar():
         texto_email=texto
     )
 
+def classificar_email_avancado(texto):
+    """Classificação avançada com spaCy"""
+    if nlp is None:
+        # Fallback para classificação simples
+        return classificar_email_simples(texto)
+    
+    # Processamento com spaCy
+    doc = nlp(texto.lower())
+    
+    # Palavras-chave produtivas com lematização
+    palavras_produtivas = ['suporte', 'dúvida', 'pendência', 'status', 'requerimento', 'problema', 'ajuda', 'solicitação', 'assistência']
+    
+    # Extrai lemas (formas base das palavras)
+    lemas = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+    
+    # Verifica palavras-chave nos lemas
+    for palavra in palavras_produtivas:
+        if palavra in lemas:
+            return "Produtivo"
+    
+    # Análise adicional: verifica entidades nomeadas
+    for ent in doc.ents:
+        if ent.label_ in ['ORG', 'PERSON', 'MONEY', 'DATE']:
+            # Se tem entidades importantes, pode ser produtivo
+            if any(palavra in texto.lower() for palavra in ['preciso', 'necessito', 'urgente']):
+                return "Produtivo"
+    
+    return "Improdutivo"
+
 def classificar_email_simples(texto):
-    """Classificação simples"""
+    """Classificação simples (fallback)"""
     texto_lower = texto.lower()
     palavras_produtivas = ['suporte', 'dúvida', 'pendência', 'status', 'requerimento', 'problema', 'ajuda']
     
@@ -121,8 +161,49 @@ def classificar_email_simples(texto):
             return "Produtivo"
     return "Improdutivo"
 
+def gerar_resposta_com_ia(texto, categoria):
+    """Gera resposta usando API de IA (Hugging Face)"""
+    try:
+        # API Hugging Face para geração de texto
+        API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
+        
+        # Prompt em português
+        prompt = f"""
+        Você é um assistente profissional respondendo a um email.
+        Email recebido: {texto}
+        Categoria: {categoria}
+        
+        Responda de forma educada e profissional em português brasileiro.
+        Seja conciso e direto ao ponto.
+        """
+        
+        headers = {"Content-Type": "application/json"}
+        payload = {"inputs": prompt}
+        
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            result = response.json()
+            if isinstance(result, list) and len(result) > 0:
+                return result[0].get('generated_text', 'Resposta gerada com sucesso.')
+            return "Resposta gerada com sucesso."
+        else:
+            # Fallback para resposta automática
+            return gerar_resposta_automatica(categoria)
+            
+    except Exception as e:
+        # Fallback para resposta automática
+        return gerar_resposta_automatica(categoria)
+
+def gerar_resposta_automatica(categoria):
+    """Resposta automática baseada na categoria"""
+    if categoria == "Produtivo":
+        return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Nossa equipe está analisando o caso e retornaremos em até 24 horas. Obrigado pelo contato!"
+    else:
+        return "Agradecemos sua mensagem! Caso precise de alguma informação ou suporte, estamos sempre disponíveis para ajudar."
+
 def gerar_resposta_simples(texto, categoria):
-    """Resposta simples"""
+    """Resposta simples (fallback)"""
     if categoria == "Produtivo":
         return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Obrigado pelo contato."
     else:
