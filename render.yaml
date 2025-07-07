@@ -2,11 +2,9 @@ services:
   - type: web
     name: desafioweb
     env: python
-    buildCommand: |
-      pip install -r requirements.txt
-      pip install gunicorn
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120
+    buildCommand: pip install flask
+    startCommand: python app.py
     envVars:
-      - key: OPENAI_API_KEY
-        sync: false
+      - key: PORT
+        value: 10000
 
