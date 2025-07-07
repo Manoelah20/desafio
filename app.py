@@ -33,10 +33,15 @@ HTML_TEMPLATE = '''
             <div class="col-md-8">
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <form method="POST" action="/processar">
+                        <form method="POST" action="/processar" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="texto_email" class="form-label">Cole o conteúdo do e-mail:</label>
                                 <textarea class="form-control" id="texto_email" name="texto_email" rows="6" placeholder="Digite ou cole aqui...">{{ texto_email or "" }}</textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="arquivo_email" class="form-label">Ou envie um arquivo (.txt):</label>
+                                <input type="file" class="form-control" id="arquivo_email" name="arquivo_email" accept=".txt">
                             </div>
 
                             <div class="d-flex gap-2">
@@ -97,10 +102,21 @@ def index():
 @app.route('/processar', methods=['POST'])
 def processar():
     texto = request.form.get('texto_email') or ''
+    arquivo = request.files.get('arquivo_email')
+
+    # Se arquivo foi enviado
+    if arquivo and arquivo.filename != '':
+        if arquivo.filename and arquivo.filename.endswith('.txt'):
+            try:
+                texto = arquivo.read().decode('utf-8')
+                if not texto.strip():
+                    return render_template_string(HTML_TEMPLATE, categoria="⚠️ Arquivo vazio!", resposta="Por favor, envie um arquivo com conteúdo válido.")
+            except:
+                return render_template_string(HTML_TEMPLATE, categoria="⚠️ Erro ao ler arquivo!", resposta="Por favor, envie um arquivo .txt válido.")
     
     # Se nenhum conteúdo foi fornecido
     if not texto.strip():
-        return render_template_string(HTML_TEMPLATE, categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto.")
+        return render_template_string(HTML_TEMPLATE, categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto ou envie um arquivo.")
 
     # Classificação avançada com NLP
     categoria = classificar_email_avancado(texto)
