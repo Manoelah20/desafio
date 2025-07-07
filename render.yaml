@@ -5,11 +5,11 @@ services:
     buildCommand: |
       echo "Installing dependencies..."
       pip install -r requirements.txt
+      chmod +x start.sh
       echo "Build completed successfully"
     startCommand: |
       echo "Starting Flask app..."
-      python3 -c "import flask; print('Flask version:', flask.__version__)"
-      python3 app_final.py
+      ./start.sh
     envVars:
       - key: PORT
         value: 10000
