@@ -9,7 +9,7 @@ services:
     startCommand: |
       echo "Starting Flask app..."
       python -c "import flask; print('Flask version:', flask.__version__)"
-      python app.py
+      python app_final.py
     envVars:
       - key: PORT
         value: 10000
