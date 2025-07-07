@@ -82,9 +82,6 @@ HTML_TEMPLATE = '''
 </html>
 '''
 
-# Lista simples para armazenar histórico (reinicia a cada execução)
-historico = []
-
 @app.route('/')
 def index():
     return render_template_string(HTML_TEMPLATE)
@@ -94,9 +91,8 @@ def processar():
     texto = request.form.get('texto_email') or ''
     arquivo = request.files.get('arquivo_email')
 
-    # Se arquivo foi enviado
-    if arquivo and arquivo.filename != '':
-        if arquivo.filename and arquivo.filename.endswith('.txt'):
+    if arquivo and arquivo.filename and arquivo.filename != '':
+        if arquivo.filename.endswith('.txt'):
             try:
                 texto = arquivo.read().decode('utf-8')
                 if not texto.strip():
@@ -104,22 +100,12 @@ def processar():
             except:
                 return render_template_string(HTML_TEMPLATE, categoria="⚠️ Erro ao ler arquivo!", resposta="Por favor, envie um arquivo .txt válido.")
     
-    # Se nenhum conteúdo foi fornecido
     if not texto.strip():
         return render_template_string(HTML_TEMPLATE, categoria="⚠️ Nenhum conteúdo recebido.", resposta="Por favor, insira texto ou envie um arquivo.")
 
-    # Classificação simples e confiável
-    categoria = classificar_email_simples(texto)
-    resposta = gerar_resposta_automatica(categoria)
+    categoria = classificar_email(texto)
+    resposta = gerar_resposta(categoria)
 
-    # Salva no histórico (em memória)
-    historico.append({
-        'texto': texto,
-        'categoria': categoria,
-        'resposta': resposta
-    })
-
-    # Exibe resultado
     return render_template_string(
         HTML_TEMPLATE,
         categoria=categoria,
@@ -127,11 +113,9 @@ def processar():
         texto_email=texto
     )
 
-def classificar_email_simples(texto):
-    """Classificação simples e confiável"""
+def classificar_email(texto):
     texto_lower = texto.lower()
     
-    # Palavras-chave produtivas
     palavras_produtivas = [
         'suporte', 'dúvida', 'pendência', 'status', 'requerimento', 
         'problema', 'ajuda', 'solicitação', 'assistência', 'urgente',
@@ -139,31 +123,24 @@ def classificar_email_simples(texto):
         'reclamação', 'reembolso', 'cancelamento', 'troca'
     ]
     
-    # Palavras-chave improdutivas
     palavras_improdutivas = [
         'spam', 'promoção', 'oferta', 'desconto', 'marketing',
         'newsletter', 'publicidade', 'propaganda', 'venda'
     ]
     
-    # Conta palavras produtivas
     count_produtivo = sum(1 for palavra in palavras_produtivas if palavra in texto_lower)
-    
-    # Conta palavras improdutivas
     count_improdutivo = sum(1 for palavra in palavras_improdutivas if palavra in texto_lower)
     
-    # Se tem mais palavras produtivas, é produtivo
     if count_produtivo > count_improdutivo:
         return "Produtivo"
     elif count_improdutivo > count_produtivo:
         return "Improdutivo"
     else:
-        # Se empate, verifica se tem palavras-chave fortes
         if any(palavra in texto_lower for palavra in ['urgente', 'problema', 'erro', 'falha']):
             return "Produtivo"
         return "Improdutivo"
 
-def gerar_resposta_automatica(categoria):
-    """Resposta automática baseada na categoria"""
+def gerar_resposta(categoria):
     if categoria == "Produtivo":
         return "Olá! Recebemos sua solicitação e em breve retornaremos com uma solução. Nossa equipe está analisando o caso e retornaremos em até 24 horas. Obrigado pelo contato!"
     else:
