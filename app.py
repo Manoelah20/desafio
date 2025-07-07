@@ -23,10 +23,10 @@ HTML_TEMPLATE = '''
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+<body style="background: linear-gradient(135deg, #000000 0%, #FFD700 100%); min-height: 100vh;">
     <div class="container py-5">
         <h1 class="text-center mb-4 text-white">
-            <i class="fa-solid fa-envelope-open-text text-primary"></i>
+            <i class="fa-solid fa-envelope-open-text text-warning"></i>
             Classificador de E-mails com IA
         </h1>
 
@@ -41,7 +41,7 @@ HTML_TEMPLATE = '''
                             </div>
 
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="submit" class="btn btn-warning btn-lg text-dark">
                                     <i class="fa-solid fa-paper-plane"></i> Enviar para IA
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary btn-lg" onclick="window.location.href='/'">
@@ -58,7 +58,7 @@ HTML_TEMPLATE = '''
                         {% if categoria %}
                             <div class="mt-4">
                                 <h4>Categoria detectada:</h4>
-                                <span class="badge {% if categoria == 'Produtivo' %}bg-success{% else %}bg-secondary{% endif %} fs-4 py-2 px-4">
+                                <span class="badge {% if categoria == 'Produtivo' %}bg-warning text-dark{% else %}bg-dark{% endif %} fs-4 py-2 px-4">
                                     <i class="fa-solid fa-tag"></i> {{ categoria }}
                                 </span>
                             </div>
@@ -66,8 +66,8 @@ HTML_TEMPLATE = '''
 
                         {% if resposta %}
                             <div class="mt-4">
-                                <h4><i class="fa-solid fa-robot text-info"></i> Resposta sugerida:</h4>
-                                <div class="alert alert-info fs-5">
+                                <h4><i class="fa-solid fa-robot text-warning"></i> Resposta sugerida:</h4>
+                                <div class="alert alert-warning fs-5 text-dark">
                                     {{ resposta }}
                                 </div>
                             </div>
@@ -105,7 +105,8 @@ def processar():
 
     # Classificação avançada com NLP
     categoria = classificar_email_avancado(texto)
-    resposta = gerar_resposta_com_ia(texto, categoria)
+    # Usa resposta automática melhorada (mais confiável)
+    resposta = gerar_resposta_automatica(categoria)
 
     # Salva no histórico (em memória)
     historico.append({
